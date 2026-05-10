@@ -77,6 +77,10 @@ let state = {
   patiencePaused: false,
   // True between "customer exits" and "next customer entrance starts"
   inTransition: false,
+  // Drip-feed glyph unlocks: counter increments on each correct order, fires every 3
+  ordersSinceGlyphDrip: 0,
+  // Recent ingredients used in correct orders (most recent first), used to bias drip selection
+  recentIngredients: [],
 };
 
 // Look up what color/icon this customer "sees" for a true ingredient.
@@ -1036,6 +1040,22 @@ function handleCorrectOrder() {
     });
   }
 
+  // Update recent-ingredients history (most recent first, max 6 ids)
+  state.currentOrder.forEach(id => {
+    state.recentIngredients = [id, ...state.recentIngredients.filter(x => x !== id)].slice(0, 6);
+  });
+
+  // Drip-feed glyph unlock: every 3rd correct order, bank one undecoded glyph
+  state.ordersSinceGlyphDrip += 1;
+  if (state.ordersSinceGlyphDrip >= 3) {
+    state.ordersSinceGlyphDrip = 0;
+    const ing = pickGlyphToUnlock();
+    if (ing) {
+      // Defer slightly so the buildCodex() call below runs first and the glyph element exists
+      setTimeout(() => unlockGlyph(ing), 300);
+    }
+  }
+
   updateHUD();
   buildCodex(); // Refresh codex to show newly-learned swaps and glyph decodes
   // checkRecipeFragments returns true if a recipe is about to unlock
@@ -1108,6 +1128,74 @@ function revealCodexEntry(id) {
   dot.textContent = ing.icon;
   entry.querySelector('.codex-label').textContent = ing.name;
   gsap.fromTo(entry, { scale: 0.8, opacity: .35 }, { scale: 1, opacity: 1, duration: .5, ease: 'back.out(2)' });
+}
+
+// ── GLYPH DRIP-FEED ──────────────────────────────────────────────────────────
+// Every 3 correct orders, unlock one undecoded glyph, preferring ingredients
+// the player has actually used in recent orders.
+
+function pickGlyphToUnlock() {
+  // Build list of undecoded glyphs (glyphServes < 1)
+  const undecoded = INGREDIENTS.filter(ing => (state.glyphServes[ing.id] || 0) < 1);
+  if (undecoded.length === 0) return null;
+
+  // Prefer ingredients used recently
+  const recent = state.recentIngredients || [];
+  for (const id of recent) {
+    const match = undecoded.find(ing => ing.id === id);
+    if (match) return match;
+  }
+
+  // Otherwise random among undecoded
+  return undecoded[Math.floor(Math.random() * undecoded.length)];
+}
+
+function unlockGlyph(ing) {
+  if (!ing) return;
+  // Bank the glyph (pretend it was served correctly)
+  state.glyphServes[ing.id] = Math.max(state.glyphServes[ing.id] || 0, 1);
+
+  // Refresh the codex grid so the glyph indicator updates from "?" to the actual symbol
+  buildCodex();
+
+  // Highlight the entry that just gained its glyph
+  const entry = document.getElementById('codex-' + ing.id);
+  if (entry) {
+    const glyphEl = entry.querySelector('.codex-glyph');
+    if (glyphEl) {
+      gsap.fromTo(glyphEl,
+        { scale: 0.4, opacity: 0, color: '#fff' },
+        { scale: 1, opacity: 1, color: '#a8ff78', duration: .6, ease: 'back.out(2)' });
+    }
+    gsap.fromTo(entry,
+      { boxShadow: '0 0 0 2px rgba(168,255,120,0.8)' },
+      { boxShadow: '0 0 0 0 rgba(168,255,120,0)', duration: 1.2, ease: 'power2.out' });
+  }
+
+  showGlyphToast(ing);
+}
+
+function showGlyphToast(ing) {
+  // Floating notification — small, top-right of the cafe scene
+  let toast = document.getElementById('glyph-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'glyph-toast';
+    toast.className = 'glyph-toast';
+    document.body.appendChild(toast);
+  }
+  toast.innerHTML = `
+    <span class="glyph-toast-eyebrow">Glyph Decoded</span>
+    <span class="glyph-toast-symbol">${ing.glyph}</span>
+    <span class="glyph-toast-name">${ing.name}</span>
+  `;
+  gsap.killTweensOf(toast);
+  gsap.fromTo(toast,
+    { opacity: 0, x: 40 },
+    { opacity: 1, x: 0, duration: .5, ease: 'back.out(1.5)',
+      onComplete: () => {
+        gsap.to(toast, { opacity: 0, x: 40, duration: .5, delay: 2.5, ease: 'power2.in' });
+      }});
 }
 
 // ── RECIPE FRAGMENTS ─────────────────────────────────────────────────────────
@@ -1299,6 +1387,8 @@ function startGame() {
     eliminations: [],
     // True between "customer exits" and "next customer entrance starts" — visibility watchdog ignores customer-wrap during this window
     inTransition: false,
+    ordersSinceGlyphDrip: 0,
+    recentIngredients: [],
   };
   RECIPES.forEach(r => r.fragments = 0);
 
