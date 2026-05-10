@@ -3,16 +3,16 @@ gsap.registerPlugin(TextPlugin);
 // ── DATA ──────────────────────────────────────────────────────────────────────
 
 const INGREDIENTS = [
-  { id: 'nova',  name: 'Ember Espresso',    color: '#e05555', icon: '⧋', glyph: '☍', family: 'warm',   shape: 'polygon(50% 0%, 0% 100%, 100% 100%)', speed: 0.15, tone: 261.63 },
-  { id: 'cryo',  name: 'Frostbite Latte',   color: '#4ab8c4', icon: '❄', glyph: '⌬', family: 'cool',   shape: 'polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%)', speed: 1.2, tone: 293.66 },
-  { id: 'lunar', name: 'Moonshadow Cream',  color: '#e8e0d0', icon: '☽', glyph: '⟁', family: 'pale',   shape: 'circle(50% at 50% 50%)', speed: 2.5, tone: 329.63 },
-  { id: 'void',  name: 'Eclipse Cordial',   color: '#7b5ea7', icon: '✦', glyph: '⏃', family: 'cool',   shape: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)', speed: 0.4, tone: 349.23 },
-  { id: 'star',  name: 'Starlight Sugar',   color: '#f0c040', icon: '★', glyph: '⌖', family: 'warm',   shape: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)', speed: 0.25, tone: 392.00 },
-  { id: 'nebul', name: 'Drifting Mist',     color: '#c872c8', icon: '○', glyph: '⏚', family: 'vivid',  shape: 'polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)', speed: 0.8, tone: 440.00 },
-  { id: 'quark', name: 'Tidewater Tonic',   color: '#4a8aff', icon: '◆', glyph: '⍟', family: 'cool',   shape: 'polygon(0% 15%, 15% 15%, 15% 0%, 85% 0%, 85% 15%, 100% 15%, 100% 85%, 85% 85%, 85% 100%, 15% 100%, 15% 85%, 0% 85%)', speed: 0.1, tone: 493.88 },
-  { id: 'solar', name: 'Sunbeam Honey',     color: '#ff8c42', icon: '◉', glyph: '⎈', family: 'warm',   shape: 'polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%)', speed: 0.5, tone: 523.25 },
-  { id: 'comet', name: 'Streaking Spark',   color: '#a8ff78', icon: '✧', glyph: '⌇', family: 'vivid',  shape: 'polygon(100% 0, 0 100%, 100% 100%)', speed: 0.2, tone: 587.33 },
-  { id: 'pulsr', name: 'Pulsar Sprinkle',   color: '#ff6eb4', icon: '▲', glyph: '⏁', family: 'vivid',  shape: 'polygon(50% 0%, 0% 100%, 50% 100%)', speed: 0.05, tone: 659.25 },
+  { id: 'nova',  name: 'Hot Espresso',     color: '#e05555', icon: '⧋', glyph: '☍', family: 'warm',   shape: 'polygon(50% 0%, 0% 100%, 100% 100%)', speed: 0.15, tone: 261.63 },
+  { id: 'cryo',  name: 'Iced Latte',       color: '#4ab8c4', icon: '❄', glyph: '⌬', family: 'cool',   shape: 'polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%)', speed: 1.2, tone: 293.66 },
+  { id: 'lunar', name: 'Midnight Mocha',   color: '#e8e0d0', icon: '☽', glyph: '⟁', family: 'pale',   shape: 'circle(50% at 50% 50%)', speed: 2.5, tone: 329.63 },
+  { id: 'void',  name: 'Dark Cocoa',       color: '#7b5ea7', icon: '✦', glyph: '⏃', family: 'cool',   shape: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)', speed: 0.4, tone: 349.23 },
+  { id: 'star',  name: 'Vanilla Cream',    color: '#f0c040', icon: '★', glyph: '⌖', family: 'warm',   shape: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)', speed: 0.25, tone: 392.00 },
+  { id: 'nebul', name: 'Cloud Foam',       color: '#c872c8', icon: '○', glyph: '⏚', family: 'vivid',  shape: 'polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)', speed: 0.8, tone: 440.00 },
+  { id: 'quark', name: 'Mint Tonic',       color: '#4a8aff', icon: '◆', glyph: '⍟', family: 'cool',   shape: 'polygon(0% 15%, 15% 15%, 15% 0%, 85% 0%, 85% 15%, 100% 15%, 100% 85%, 85% 85%, 85% 100%, 15% 100%, 15% 85%, 0% 85%)', speed: 0.1, tone: 493.88 },
+  { id: 'solar', name: 'Sunrise Honey',    color: '#ff8c42', icon: '◉', glyph: '⎈', family: 'warm',   shape: 'polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%)', speed: 0.5, tone: 523.25 },
+  { id: 'comet', name: 'Ginger Snap',      color: '#a8ff78', icon: '✧', glyph: '⌇', family: 'vivid',  shape: 'polygon(100% 0, 0 100%, 100% 100%)', speed: 0.2, tone: 587.33 },
+  { id: 'pulsr', name: 'Berry Sprinkle',   color: '#ff6eb4', icon: '▲', glyph: '⏁', family: 'vivid',  shape: 'polygon(50% 0%, 0% 100%, 50% 100%)', speed: 0.05, tone: 659.25 },
 ];
 
 const RECIPES = [
@@ -92,6 +92,14 @@ function displayedAs(cust, trueIng) {
 
 function pairKey(a, b) {
   return [a, b].sort().join('|');
+}
+
+// Short label = the last word of the ingredient's full name (the cafe item itself).
+// e.g., "Hot Espresso" → "Espresso"
+function shortName(ing) {
+  if (!ing || !ing.name) return '';
+  const parts = ing.name.split(' ');
+  return parts[parts.length - 1];
 }
 
 // Returns the swap-pair tuple [a, b] if dropped & expected are partners under this customer's cipher; else null.
@@ -292,26 +300,14 @@ animateTitle();
 function buildIngredientGrid() {
   const grid = document.getElementById('ingredient-grid');
   grid.innerHTML = '';
-
-  // Define the row layout: each row is a swap pair (or a single unpaired ingredient).
-  // Pairs come from the union of all Chromara cipherSwaps.
-  const PAIR_ROWS = [
-    ['nova',  'cryo'],   // Ember ↔ Frostbite (hot/cold)
-    ['void',  'star'],   // Eclipse ↔ Starlight (dark/light)
-    ['lunar', 'solar'],  // Moonshadow ↔ Sunbeam (moon/sun)
-    ['nebul', 'comet'],  // Drifting ↔ Streaking (slow/fast)
-    ['quark'],           // Tidewater (unpaired)
-    ['pulsr'],           // Pulsar (unpaired)
-  ];
-
-  const makeBtn = (ing) => {
+  INGREDIENTS.forEach(ing => {
     const btn = document.createElement('button');
     btn.className = 'ing-btn';
     btn.dataset.id = ing.id;
     btn.draggable = true;
     btn.innerHTML = `
       <div class="ing-dot" style="background:${ing.color}">${ing.icon}</div>
-      <div class="ing-name">${ing.name.split(' ')[0]}</div>
+      <div class="ing-name">${ing.name}</div>
     `;
     btn.addEventListener('dragstart', e => {
       if (!state.gameActive || state.patiencePaused) { e.preventDefault(); return; }
@@ -320,30 +316,7 @@ function buildIngredientGrid() {
       btn.classList.add('dragging');
     });
     btn.addEventListener('dragend', () => btn.classList.remove('dragging'));
-    return btn;
-  };
-
-  PAIR_ROWS.forEach(row => {
-    const rowEl = document.createElement('div');
-    rowEl.className = 'ing-row';
-    if (row.length === 2) rowEl.classList.add('ing-row-pair');
-
-    if (row.length === 2) {
-      const [a, b] = row.map(id => INGREDIENTS.find(i => i.id === id)).filter(Boolean);
-      if (!a || !b) return;
-      rowEl.appendChild(makeBtn(a));
-      const link = document.createElement('div');
-      link.className = 'ing-pair-link';
-      link.innerHTML = '<span>⇄</span>';
-      rowEl.appendChild(link);
-      rowEl.appendChild(makeBtn(b));
-    } else {
-      const ing = INGREDIENTS.find(i => i.id === row[0]);
-      if (!ing) return;
-      rowEl.appendChild(makeBtn(ing));
-    }
-
-    grid.appendChild(rowEl);
+    grid.appendChild(btn);
   });
 }
 
@@ -362,7 +335,7 @@ function buildCodex() {
       : (isKnown ? `<div class="codex-glyph locked" title="Glyphara cipher unknown">?</div>` : '');
     el.innerHTML = `
       <div class="codex-dot" style="background:${isKnown ? ing.color : '#333'}">${isKnown ? ing.icon : '?'}</div>
-      <div class="codex-label">${isKnown ? ing.name.split(' ')[0] : '???'}</div>
+      <div class="codex-label">${isKnown ? ing.name : '???'}</div>
       ${isKnown ? `<div class="codex-shape" style="clip-path:${ing.shape};background:${ing.color}"></div>` : ''}
       ${glyphPart}
     `;
@@ -1133,7 +1106,7 @@ function revealCodexEntry(id) {
   const dot = entry.querySelector('.codex-dot');
   dot.style.background = ing.color;
   dot.textContent = ing.icon;
-  entry.querySelector('.codex-label').textContent = ing.name.split(' ')[0];
+  entry.querySelector('.codex-label').textContent = ing.name;
   gsap.fromTo(entry, { scale: 0.8, opacity: .35 }, { scale: 1, opacity: 1, duration: .5, ease: 'back.out(2)' });
 }
 
