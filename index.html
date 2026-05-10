@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cosmic Brews</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Cinzel:wght@400;600;900&family=Exo+2:wght@200;400;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="starfield"></div>
+
+<!-- TITLE SCREEN -->
+<div class="screen active" id="title-screen">
+  <div class="title-nebula"></div>
+  <div class="title-main">
+    <div class="title-eyebrow">Interstellar Transit — Year 3000</div>
+    <div class="title-word">COSMIC<br>BREWS</div>
+    <div class="title-divider"></div>
+    <div class="title-sub">Crossroads of the Galaxy</div>
+    <div class="title-desc">
+      Serve customers from across the stars. Each speaks a different language —
+      colors, shapes, pulses, glyphs, and tones. Decode their orders. Discover new recipes.
+      Keep the cafe alive between the stars.
+    </div>
+    <button class="btn-start" id="btn-start">Begin Service</button>
+  </div>
+</div>
+
+<!-- TUTORIAL OVERLAY -->
+<div class="screen" id="tutorial-overlay">
+  <div class="tutorial-box">
+    <div class="tutorial-step-indicator" id="tutorial-step-indicator"></div>
+    <div class="tutorial-title" id="tutorial-title"></div>
+    <div class="tutorial-text" id="tutorial-text"></div>
+    <div class="tutorial-visual" id="tutorial-visual"></div>
+    <button class="btn-tutorial-next" id="btn-tutorial-next">Next</button>
+  </div>
+</div>
+
+<!-- SHIFT INTRO -->
+<div class="screen" id="shift-intro">
+  <div class="shift-intro-content">
+    <div class="shift-eyebrow" id="shift-eyebrow"></div>
+    <div class="shift-title" id="shift-title"></div>
+    <div class="shift-lore" id="shift-lore"></div>
+    <div class="shift-continue" id="shift-continue">[ Press to begin ]</div>
+  </div>
+</div>
+
+<!-- GAME SCREEN -->
+<div class="screen" id="game-screen">
+  <div class="top-bar">
+    <div class="logo">Cosmic Brews</div>
+    <div class="round-info">
+      <span class="stat-label" id="round-label">Shift 1</span>
+      <span class="streak-display" id="streak-display"></span>
+    </div>
+    <div class="score-wrap">
+      <div class="stat">
+        <span class="stat-label">Credits</span>
+        <span class="stat-value" id="score-display">0</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Served</span>
+        <span class="stat-value" id="served-display">0</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Tips</span>
+        <span class="stat-value tip-value" id="tips-display">0</span>
+      </div>
+      <div class="lives" id="lives-display">
+        <span class="heart">&#9829;</span>
+        <span class="heart">&#9829;</span>
+        <span class="heart">&#9829;</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="game-layout">
+    <div class="cafe-scene" id="cafe-scene">
+      <div class="ambient-light"></div>
+      <div class="shelf shelf-left">
+        <div class="shelf-item" style="left:10px;height:28px;background:#2a1f3d;width:10px"></div>
+        <div class="shelf-item" style="left:28px;height:20px;background:#1a2a3a;width:14px;border-radius:2px 2px 0 0"></div>
+        <div class="shelf-item" style="left:50px;height:32px;background:#2a2a1f;width:8px"></div>
+        <div class="shelf-item" style="left:66px;height:18px;background:#1f2a2a;width:16px;border-radius:50% 50% 0 0"></div>
+      </div>
+      <div class="shelf shelf-right">
+        <div class="shelf-item" style="left:8px;height:26px;background:#1f1f2a;width:12px;border-radius:4px 4px 0 0"></div>
+        <div class="shelf-item" style="left:28px;height:34px;background:#2a1a1a;width:10px"></div>
+        <div class="shelf-item" style="left:46px;height:20px;background:#1a2a1a;width:16px;border-radius:2px 2px 0 0"></div>
+        <div class="shelf-item" style="left:70px;height:28px;background:#2a1f2a;width:10px"></div>
+      </div>
+
+      <div class="customer-area" id="customer-area">
+        <div class="customer-wrap" id="customer-wrap">
+          <div class="customer-planet" id="customer-planet"></div>
+          <img class="customer-img" id="customer-img" alt="" style="display:none">
+          <svg class="customer-svg" id="customer-svg" viewBox="0 0 100 120"></svg>
+          <div class="customer-name" id="customer-name"></div>
+        </div>
+      </div>
+
+      <!-- TV Monitor on counter -->
+      <div class="tv-monitor" id="tv-screen">
+        <div class="tv-body">
+          <div class="tv-bezel">
+            <div class="tv-display-area">
+              <div class="tv-scanlines"></div>
+              <div class="tv-channel-label">Order Transmission</div>
+              <div class="order-seq" id="order-seq"></div>
+              <button class="btn-replay-sound" id="btn-replay-sound" style="display:none">&#9654; Replay</button>
+            </div>
+            <div class="tv-patience-row">
+              <div class="patience-bar"><div class="patience-fill" id="patience-fill"></div></div>
+            </div>
+          </div>
+          <div class="tv-controls-row">
+            <div class="tv-led"></div>
+            <span class="tv-brand">COSMO-7</span>
+            <div class="tv-knobs">
+              <div class="tv-knob"></div>
+              <div class="tv-knob"></div>
+            </div>
+          </div>
+        </div>
+        <div class="tv-stand"></div>
+      </div>
+
+      <!-- Mixing animation area -->
+      <div class="mixing-area" id="mixing-area">
+        <svg class="mixing-glass-svg" id="mixing-glass-svg" viewBox="0 0 80 100"></svg>
+        <div class="mixing-label" id="mixing-label"></div>
+      </div>
+
+      <div class="counter"><div class="counter-top"></div></div>
+    </div>
+
+    <div class="right-panel">
+      <div class="panel-section codex-section">
+        <div class="panel-title">Codex</div>
+        <div class="codex-grid" id="codex-grid"></div>
+      </div>
+
+      <div class="panel-section" style="flex:1;overflow-y:auto">
+        <div class="panel-title">Ingredients</div>
+        <div class="ingredient-grid" id="ingredient-grid"></div>
+      </div>
+
+      <div class="panel-section">
+        <div class="panel-title">Your Order</div>
+        <div class="order-tray" id="order-tray"></div>
+      </div>
+
+      <div class="panel-section recipe-section">
+        <div class="panel-title">Recipe Journal</div>
+        <div class="recipe-list" id="recipe-list"></div>
+      </div>
+
+      <div class="action-row">
+        <button class="btn-action" id="btn-clear">Clear</button>
+        <button class="btn-action btn-serve" id="btn-serve">Serve &#8599;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEEDBACK -->
+<div id="feedback-overlay">
+  <div class="feedback-msg" id="feedback-msg"></div>
+  <div class="feedback-tip" id="feedback-tip"></div>
+</div>
+
+<!-- RECIPE UNLOCK -->
+<div class="screen" id="unlock-overlay">
+  <canvas class="unlock-particles" id="particles-canvas"></canvas>
+  <div class="unlock-eyebrow">Transmission Received</div>
+  <div class="unlock-title" id="unlock-title"></div>
+  <div class="unlock-sub" id="unlock-sub"></div>
+  <div class="unlock-lore" id="unlock-lore"></div>
+  <div class="unlock-continue" id="unlock-continue">[ Tap to continue ]</div>
+</div>
+
+<!-- SHIFT COMPLETE -->
+<div class="screen" id="shift-complete">
+  <div class="shift-complete-content">
+    <div class="shift-complete-eyebrow">Shift Complete</div>
+    <div class="shift-complete-title" id="shift-complete-title"></div>
+    <div class="shift-complete-stats" id="shift-complete-stats"></div>
+    <div class="shift-complete-lore" id="shift-complete-lore"></div>
+    <button class="btn-next-shift" id="btn-next-shift">Next Shift</button>
+  </div>
+</div>
+
+<!-- GAME OVER -->
+<div class="screen" id="gameover-screen">
+  <div class="go-title">SHIFT OVER</div>
+  <div class="go-score" id="go-score"></div>
+  <div class="go-sub">The galaxy will remember your service</div>
+  <div class="go-recipes-summary" id="go-recipes-summary"></div>
+  <button class="btn-restart" id="btn-restart">New Shift</button>
+</div>
+
+<!-- ENDGAME REVEAL -->
+<div class="screen" id="endgame-screen">
+  <canvas id="endgame-canvas"></canvas>
+  <div class="endgame-content">
+    <div class="endgame-eyebrow">All Recipes Discovered</div>
+    <div class="endgame-title" id="endgame-title"></div>
+    <div class="endgame-text" id="endgame-text"></div>
+    <button class="btn-restart" id="btn-endgame-restart">Play Again</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
