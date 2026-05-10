@@ -3,16 +3,16 @@ gsap.registerPlugin(TextPlugin);
 // ── DATA ──────────────────────────────────────────────────────────────────────
 
 const INGREDIENTS = [
-  { id: 'nova',  name: 'Nova Brew',   color: '#e05555', icon: '⧋', glyph: '☍', family: 'warm',   shape: 'polygon(50% 0%, 0% 100%, 100% 100%)', speed: 0.15, tone: 261.63 },
-  { id: 'cryo',  name: 'Cryo Mist',   color: '#4ab8c4', icon: '❄', glyph: '⌬', family: 'cool',   shape: 'polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%)', speed: 1.2, tone: 293.66 },
-  { id: 'lunar', name: 'Lunar Milk',  color: '#e8e0d0', icon: '☽', glyph: '⟁', family: 'pale',   shape: 'circle(50% at 50% 50%)', speed: 2.5, tone: 329.63 },
-  { id: 'void',  name: 'Void Syrup',  color: '#7b5ea7', icon: '✦', glyph: '⏃', family: 'cool',   shape: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)', speed: 0.4, tone: 349.23 },
-  { id: 'star',  name: 'Stardust',    color: '#f0c040', icon: '★', glyph: '⌖', family: 'warm',   shape: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)', speed: 0.25, tone: 392.00 },
-  { id: 'nebul', name: 'Cosmic Foam', color: '#c872c8', icon: '○', glyph: '⏚', family: 'vivid',  shape: 'polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)', speed: 0.8, tone: 440.00 },
-  { id: 'quark', name: 'Quark Drop',  color: '#4a8aff', icon: '◆', glyph: '⍟', family: 'cool',   shape: 'polygon(0% 15%, 15% 15%, 15% 0%, 85% 0%, 85% 15%, 100% 15%, 100% 85%, 85% 85%, 85% 100%, 15% 100%, 15% 85%, 0% 85%)', speed: 0.1, tone: 493.88 },
-  { id: 'solar', name: 'Solar Zest',  color: '#ff8c42', icon: '◉', glyph: '⎈', family: 'warm',   shape: 'polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%)', speed: 0.5, tone: 523.25 },
-  { id: 'comet', name: 'Comet Fizz',  color: '#a8ff78', icon: '✧', glyph: '⌇', family: 'vivid',  shape: 'polygon(100% 0, 0 100%, 100% 100%)', speed: 0.2, tone: 587.33 },
-  { id: 'pulsr', name: 'Pulsar Salt', color: '#ff6eb4', icon: '▲', glyph: '⏁', family: 'vivid',  shape: 'polygon(50% 0%, 0% 100%, 50% 100%)', speed: 0.05, tone: 659.25 },
+  { id: 'nova',  name: 'Ember Espresso',    color: '#e05555', icon: '⧋', glyph: '☍', family: 'warm',   shape: 'polygon(50% 0%, 0% 100%, 100% 100%)', speed: 0.15, tone: 261.63 },
+  { id: 'cryo',  name: 'Frostbite Latte',   color: '#4ab8c4', icon: '❄', glyph: '⌬', family: 'cool',   shape: 'polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%)', speed: 1.2, tone: 293.66 },
+  { id: 'lunar', name: 'Moonshadow Cream',  color: '#e8e0d0', icon: '☽', glyph: '⟁', family: 'pale',   shape: 'circle(50% at 50% 50%)', speed: 2.5, tone: 329.63 },
+  { id: 'void',  name: 'Eclipse Cordial',   color: '#7b5ea7', icon: '✦', glyph: '⏃', family: 'cool',   shape: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)', speed: 0.4, tone: 349.23 },
+  { id: 'star',  name: 'Starlight Sugar',   color: '#f0c040', icon: '★', glyph: '⌖', family: 'warm',   shape: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)', speed: 0.25, tone: 392.00 },
+  { id: 'nebul', name: 'Drifting Mist',     color: '#c872c8', icon: '○', glyph: '⏚', family: 'vivid',  shape: 'polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)', speed: 0.8, tone: 440.00 },
+  { id: 'quark', name: 'Tidewater Tonic',   color: '#4a8aff', icon: '◆', glyph: '⍟', family: 'cool',   shape: 'polygon(0% 15%, 15% 15%, 15% 0%, 85% 0%, 85% 15%, 100% 15%, 100% 85%, 85% 85%, 85% 100%, 15% 100%, 15% 85%, 0% 85%)', speed: 0.1, tone: 493.88 },
+  { id: 'solar', name: 'Sunbeam Honey',     color: '#ff8c42', icon: '◉', glyph: '⎈', family: 'warm',   shape: 'polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%)', speed: 0.5, tone: 523.25 },
+  { id: 'comet', name: 'Streaking Spark',   color: '#a8ff78', icon: '✧', glyph: '⌇', family: 'vivid',  shape: 'polygon(100% 0, 0 100%, 100% 100%)', speed: 0.2, tone: 587.33 },
+  { id: 'pulsr', name: 'Pulsar Sprinkle',   color: '#ff6eb4', icon: '▲', glyph: '⏁', family: 'vivid',  shape: 'polygon(50% 0%, 0% 100%, 50% 100%)', speed: 0.05, tone: 659.25 },
 ];
 
 const RECIPES = [
@@ -237,6 +237,42 @@ setInterval(() => {
   }
 }, 250);
 
+// ── DEADMAN'S SWITCH ─────────────────────────────────────────────────────────
+// Recovery from stuck states: if the game thinks it's active but no patience timer
+// is running, no overlay is up, and we're not in transition — we're stuck. Force-spawn.
+let stuckCheckCount = 0;
+setInterval(() => {
+  if (!state.gameActive) { stuckCheckCount = 0; return; }
+  if (state.inTransition) { stuckCheckCount = 0; return; }
+  const unlock = document.getElementById('unlock-overlay');
+  const tutorial = document.getElementById('tutorial-overlay');
+  if (unlock && unlock.style.display === 'flex') { stuckCheckCount = 0; return; }
+  if (tutorial && tutorial.classList.contains('active')) { stuckCheckCount = 0; return; }
+
+  // Patience tween should be running OR we should be in the entrance/order-intro phase.
+  // The patience fill having scaleX === 1 with no active tween is a stuck signal.
+  const fill = document.getElementById('patience-fill');
+  if (!fill) return;
+  const hasPatience = state.patienceTween && state.patienceTween.isActive && state.patienceTween.isActive();
+
+  if (!hasPatience) {
+    stuckCheckCount += 1;
+    if (stuckCheckCount >= 4) { // ~4 seconds of nothing happening
+      console.warn('[deadman] Spawn pipeline appears stuck — forcing recovery.');
+      stuckCheckCount = 0;
+      // Force a clean spawn
+      state.inTransition = false;
+      cancelPendingSpawn();
+      gsap.killTweensOf('#customer-wrap');
+      gsap.killTweensOf('#tv-screen');
+      gsap.killTweensOf('#order-seq .order-orb');
+      spawnCustomer();
+    }
+  } else {
+    stuckCheckCount = 0;
+  }
+}, 1000);
+
 // ── TITLE SCREEN ─────────────────────────────────────────────────────────────
 
 function animateTitle() {
@@ -433,8 +469,12 @@ function drawCustomer(svg, custName, difficulty) {
 // ── SPAWN CUSTOMER ────────────────────────────────────────────────────────────
 
 function spawnCustomer() {
+  console.log('[spawn] called, gameActive=', state.gameActive, 'inTransition=', state.inTransition);
   cancelPendingSpawn(); // Cancel any scheduled spawn that might interrupt
-  if (!state.gameActive) return;
+  if (!state.gameActive) {
+    console.log('[spawn] BAILED: gameActive is false');
+    return;
+  }
   state.inTransition = true; // Block watchdog while we set up the new customer
   state.pulseTweens.forEach(t => t.kill());
   state.pulseTweens = [];
@@ -453,12 +493,40 @@ function spawnCustomer() {
 
   const orderLen = diff === 1 ? 2 : diff === 2 ? 3 : 4;
   const order = [];
-  const knownList = [...state.knownIngredients];
-  order.push(INGREDIENTS.find(i => i.id === knownList[Math.floor(Math.random() * knownList.length)]));
 
-  while (order.length < orderLen) {
+  // Build a pool of known ingredient OBJECTS (not just ids), filtering out any orphan ids
+  const knownIds = [...state.knownIngredients];
+  const knownPool = knownIds
+    .map(id => INGREDIENTS.find(i => i.id === id))
+    .filter(Boolean);
+
+  // Diagnostic: warn if knownIngredients has stale/invalid ids or is empty
+  if (knownPool.length !== knownIds.length) {
+    console.warn('[spawn] knownIngredients contains invalid ids:', knownIds, '→ valid:', knownPool.map(i => i.id));
+  }
+  if (knownIds.length === 0) {
+    console.warn('[spawn] knownIngredients was EMPTY at spawn time — falling back to seed list');
+  }
+
+  // Defensive fallback: if for any reason knownPool is empty, use the seed list
+  const seedPool = knownPool.length > 0
+    ? knownPool
+    : INGREDIENTS.filter(i => ['nova','cryo','lunar'].includes(i.id));
+
+  // Seed with one known ingredient
+  order.push(seedPool[Math.floor(Math.random() * seedPool.length)]);
+
+  // Fill the rest from all ingredients, avoiding duplicates
+  let safety = 50; // prevent infinite loop in pathological state
+  while (order.length < orderLen && safety-- > 0) {
     const ing = INGREDIENTS[Math.floor(Math.random() * INGREDIENTS.length)];
-    if (!order.find(o => o.id === ing.id)) order.push(ing);
+    if (!ing) continue;
+    if (!order.some(o => o && o.id === ing.id)) order.push(ing);
+  }
+
+  // Final sanity: drop any undefined entries that snuck in
+  for (let i = order.length - 1; i >= 0; i--) {
+    if (!order[i]) order.splice(i, 1);
   }
   order.sort(() => Math.random() - .5);
 
@@ -941,15 +1009,20 @@ function handleCorrectOrder() {
   showFeedback('CORRECT!', 'correct');
 
   state.inTransition = true;
+  console.log('[transition] handleCorrectOrder exit start, willUnlock=', willUnlock);
   gsap.to('#customer-wrap', { opacity: 0, x: 80, duration: .5, delay: .4, ease: 'power2.in' });
   gsap.to('#tv-screen', { opacity: 0, duration: .4, delay: .3, ease: 'power2.in', onComplete: () => {
+    console.log('[transition] tv-exit onComplete fired, scheduling spawn=', !willUnlock);
     state.playerOrder = [];
     updateOrderTray();
     cancelPendingSpawn();
     // If a recipe is unlocking, hideUnlock will spawn the next customer when player dismisses overlay.
     // Don't schedule a competing spawn timer.
     if (!willUnlock) {
-      state.pendingSpawn = setTimeout(spawnCustomer, 800);
+      state.pendingSpawn = setTimeout(() => {
+        console.log('[transition] spawn timer firing, gameActive=', state.gameActive);
+        spawnCustomer();
+      }, 800);
     }
   }});
 }
