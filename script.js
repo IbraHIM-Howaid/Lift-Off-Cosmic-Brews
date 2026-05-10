@@ -3,23 +3,56 @@ gsap.registerPlugin(TextPlugin);
 // ── DATA ──────────────────────────────────────────────────────────────────────
 
 const INGREDIENTS = [
-  { id: 'nova',  name: 'Hot Espresso',     color: '#e05555', icon: '⧋', glyph: '☍', family: 'warm',   shape: 'polygon(50% 0%, 0% 100%, 100% 100%)', speed: 0.15, tone: 261.63 },
-  { id: 'cryo',  name: 'Iced Latte',       color: '#4ab8c4', icon: '❄', glyph: '⌬', family: 'cool',   shape: 'polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%)', speed: 1.2, tone: 293.66 },
-  { id: 'lunar', name: 'Midnight Mocha',   color: '#e8e0d0', icon: '☽', glyph: '⟁', family: 'pale',   shape: 'circle(50% at 50% 50%)', speed: 2.5, tone: 329.63 },
-  { id: 'void',  name: 'Dark Cocoa',       color: '#7b5ea7', icon: '✦', glyph: '⏃', family: 'cool',   shape: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)', speed: 0.4, tone: 349.23 },
-  { id: 'star',  name: 'Vanilla Cream',    color: '#f0c040', icon: '★', glyph: '⌖', family: 'warm',   shape: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)', speed: 0.25, tone: 392.00 },
-  { id: 'nebul', name: 'Cloud Foam',       color: '#c872c8', icon: '○', glyph: '⏚', family: 'vivid',  shape: 'polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)', speed: 0.8, tone: 440.00 },
-  { id: 'quark', name: 'Mint Tonic',       color: '#4a8aff', icon: '◆', glyph: '⍟', family: 'cool',   shape: 'polygon(0% 15%, 15% 15%, 15% 0%, 85% 0%, 85% 15%, 100% 15%, 100% 85%, 85% 85%, 85% 100%, 15% 100%, 15% 85%, 0% 85%)', speed: 0.1, tone: 493.88 },
-  { id: 'solar', name: 'Sunrise Honey',    color: '#ff8c42', icon: '◉', glyph: '⎈', family: 'warm',   shape: 'polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%)', speed: 0.5, tone: 523.25 },
-  { id: 'comet', name: 'Ginger Snap',      color: '#a8ff78', icon: '✧', glyph: '⌇', family: 'vivid',  shape: 'polygon(100% 0, 0 100%, 100% 100%)', speed: 0.2, tone: 587.33 },
-  { id: 'pulsr', name: 'Berry Sprinkle',   color: '#ff6eb4', icon: '▲', glyph: '⏁', family: 'vivid',  shape: 'polygon(50% 0%, 0% 100%, 50% 100%)', speed: 0.05, tone: 659.25 },
+  // THE REFRESHER (Fruit + Sparkle)
+  { id: 'solar', name: 'Zest Citrus',  color: '#ff8c42', icon: '🍋', glyph: '⎈', family: 'vivid', shape: 'polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%)', speed: 0.5, tone: 523.25 },
+  { id: 'comet', name: 'Sparkling Pop', color: '#a8ff78', icon: '🫧', glyph: '⌇', family: 'vivid', shape: 'polygon(100% 0, 0 100%, 100% 100%)', speed: 0.2, tone: 587.33 },
+
+  // THE LATTE (Cream + Sweetener)
+  { id: 'lunar', name: 'Moonlit Milk',   color: '#e8e0d0', icon: '☽', glyph: '⟁', family: 'pale',  shape: 'circle(50% at 50% 50%)', speed: 2.5, tone: 329.63 },
+  { id: 'void',  name: 'Starry Syrup',    color: '#7b5ea7', icon: '★', glyph: '⏃', family: 'cool',  shape: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)', speed: 0.4, tone: 349.23 },
+
+  // THE BREW (Dark Roast + Topping)
+  { id: 'pulsr', name: 'Espresso Bean', color: '#ff6eb4', icon: '☕', glyph: '⏁', family: 'vivid', shape: 'polygon(50% 0%, 0% 100%, 50% 100%)', speed: 0.05, tone: 659.25 },
+  { id: 'nebul', name: 'Whipped Foam',  color: '#c872c8', icon: '☁️', glyph: '⏚', family: 'vivid', shape: 'polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)', speed: 0.8, tone: 440.00 },
+
+  // THE TEA (Clean Water + Natural Bloom)
+  { id: 'quark', name: 'Glowing Water', color: '#4a8aff', icon: '💧', glyph: '⍟', family: 'cool',  shape: 'polygon(0% 15%, 15% 15%, 15% 0%, 85% 0%, 85% 15%, 100% 15%, 100% 85%, 85% 85%, 85% 100%, 15% 100%, 15% 85%, 0% 85%)', speed: 0.1, tone: 493.88 },
+  { id: 'star',  name: 'Golden Nectar', color: '#f0c040', icon: '🌸', glyph: '⌖', family: 'warm',  shape: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)', speed: 0.25, tone: 392.00 },
+
+  // THE INFUSION (Heat + Ice)
+  { id: 'nova',  name: 'Steeped Tea', color: '#e05555', icon: '🫖', glyph: '☍', family: 'warm',  shape: 'polygon(50% 0%, 0% 100%, 100% 100%)', speed: 0.15, tone: 261.63 },
+  { id: 'cryo',  name: 'Crushed Ice',   color: '#4ab8c4', icon: '🧊', glyph: '⌬', family: 'cool',  shape: 'polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%)', speed: 1.2, tone: 293.66 },
 ];
 
 const RECIPES = [
-  { id: 'r1', name: 'Andromeda Dusk',   needs: ['nova','cryo','void'], fragments: 0, total: 3, lore: "A heavy depressant. Synthesizes melatonin for passengers struggling to sleep without a planetary sunset. Essential for the century-long voyage." },
-  { id: 'r2', name: 'Comet Tail Latte', needs: ['lunar','star','comet'], fragments: 0, total: 3, lore: "Packed with simulated Vitamin D and kinetic energy. Often prescribed to mechanics working long, dark shifts in the engine bay." },
-  { id: 'r3', name: 'Pulsar Punch',     needs: ['quark','pulsr','solar'], fragments: 0, total: 3, lore: "A highly caffeinated, nutrient-dense slurry. Keeps the ship's navigators alert during complex hyper-lane calculations." },
-  { id: 'r4', name: 'Cosmic Sunrise',   needs: ['nebul','solar','star'], fragments: 0, total: 3, lore: "A psychological morale booster. Engineered to taste exactly like a fresh summer morning back on Earth." },
+  {
+    id: 'r1',
+    name: 'The Infusion',
+    needs: ['nova', 'cryo', 'void'],
+    fragments: 0, total: 3,
+    lore: "A passenger from the cold rings orders it every shift. Something hot, something frozen, something to make the dark a little sweeter."
+  },
+  {
+    id: 'r2',
+    name: 'Comet Tail Latte',
+    needs: ['lunar', 'star', 'comet'],
+    fragments: 0, total: 3,
+    lore: "Pale as moonlight, bright as a flower, with a fizz that hits the back of the throat. The mechanics in Bay 7 call it 'the one that sparkles.'"
+  },
+  {
+    id: 'r3',
+    name: 'Pulsar Punch',
+    needs: ['quark', 'pulsr', 'solar'],
+    fragments: 0, total: 3,
+    lore: "Clear, dark, and sharp. The navigators won't touch anything that doesn't wake them up fast. Something wet, something bitter, something bright."
+  },
+  {
+    id: 'r4',
+    name: 'Cosmic Sunrise',
+    needs: ['nebul', 'solar', 'star'],
+    fragments: 0, total: 3,
+    lore: "Built in layers — cloud-soft on top, citrus-sharp below, golden in the middle. Looks like a dawn nobody on this ship has seen in years."
+  },
 ];
 
 // ── CUSTOM ASSETS ─────────────────────────────────────────────────────────────
