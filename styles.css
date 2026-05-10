@@ -397,24 +397,51 @@ html, body {
 .panel-title { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: .25em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
 .panel-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-.ingredient-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.ingredient-grid { display: flex; flex-direction: column; gap: 6px; }
+.ing-row {
+  display: flex; align-items: stretch; gap: 6px; width: 100%;
+}
+.ing-row-pair .ing-btn { flex: 1; }
+.ing-row:not(.ing-row-pair) .ing-btn { flex: 0 0 calc(50% - 16px); margin-left: auto; margin-right: auto; }
+.ing-pair-link {
+  display: flex; align-items: center; justify-content: center;
+  flex: 0 0 22px;
+  font-family: 'Space Mono', monospace;
+  font-size: 14px;
+  color: rgba(200,169,110,0.45);
+  user-select: none;
+  pointer-events: none;
+}
+.ing-pair-link span {
+  display: inline-block;
+  text-shadow: 0 0 6px rgba(200,169,110,0.3);
+}
 .ing-btn {
-  aspect-ratio: 1; border-radius: var(--r);
+  border-radius: var(--r);
   border: 1px solid rgba(255,255,255,0.08);
   background: rgba(255,255,255,0.03); cursor: pointer;
-  display: flex; flex-direction: column; align-items: center;
-  justify-content: center; gap: 4px; transition: all .2s;
+  display: flex; flex-direction: row; align-items: center;
+  justify-content: flex-start; gap: 8px; transition: all .2s;
   position: relative; overflow: hidden;
+  padding: 8px 10px;
+  min-height: 44px;
 }
 .ing-btn:hover { border-color: rgba(200,169,110,0.4); background: rgba(200,169,110,0.06); transform: translateY(-1px); }
-.ing-btn:active { transform: scale(0.95); }
+.ing-btn:active { transform: scale(0.97); }
 .ing-dot {
-  width: 22px; height: 22px; border-radius: 50%;
+  width: 26px; height: 26px; border-radius: 50%;
   border: 2px solid rgba(255,255,255,0.15);
   display: flex; align-items: center; justify-content: center;
-  color: var(--void); font-size: 10px; font-weight: bold;
+  color: var(--void); font-size: 12px; font-weight: bold;
+  flex-shrink: 0;
 }
-.ing-name { font-family: 'Space Mono', monospace; font-size: 7px; letter-spacing: .05em; color: var(--muted); text-align: center; line-height: 1.2; }
+.ing-name {
+  font-family: 'Space Mono', monospace; font-size: 10px;
+  letter-spacing: .03em; color: var(--text);
+  text-align: left; line-height: 1.2;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  flex: 1; min-width: 0;
+}
 .ing-key {
   position: absolute; top: 2px; right: 4px;
   font-family: 'Space Mono', monospace; font-size: 7px;
@@ -584,7 +611,6 @@ html, body {
     overflow-y: auto;
   }
   .cafe-scene { min-height: 55vh; }
-  .ingredient-grid { grid-template-columns: repeat(5, 1fr); }
   .codex-grid { grid-template-columns: repeat(5, 1fr); }
   .customer-area { top: 40px; width: 280px; }
   .tv-monitor { bottom: 76px; }
@@ -595,10 +621,10 @@ html, body {
   .top-bar { padding: 0 12px; gap: 12px; height: 44px; }
   .logo { font-size: 11px; }
   .stat-value { font-size: 13px; }
-  .ingredient-grid { grid-template-columns: repeat(5, 1fr); gap: 4px; }
-  .ing-btn { gap: 2px; }
-  .ing-dot { width: 18px; height: 18px; font-size: 8px; }
-  .ing-name { font-size: 6px; }
+  .ingredient-grid { gap: 4px; }
+  .ing-btn { padding: 6px 8px; min-height: 36px; gap: 6px; }
+  .ing-dot { width: 22px; height: 22px; font-size: 10px; }
+  .ing-name { font-size: 9px; }
   .action-row { padding: 10px 12px; }
   .panel-section { padding: 10px 12px; }
   .game-layout { padding-top: 44px; }
@@ -846,4 +872,59 @@ html, body {
   pointer-events: none;
   opacity: 0.9;
   z-index: 2;
+}
+
+/* ── GLYPH ORB AURAS (family hints for undecoded glyphs) ─────────── */
+.order-orb.glyph-orb {
+  /* Default — for DECODED glyphs (player knows them): green/known styling */
+  background: rgba(168,255,120,0.08);
+  border: 1px solid rgba(168,255,120,0.4);
+}
+.order-orb.glyph-orb .orb-glyph {
+  /* Default text color; overridden per-family for unknowns */
+  color: #a8ff78;
+  text-shadow: 0 0 8px rgba(168,255,120,0.5), 0 0 14px rgba(168,255,120,0.25);
+}
+
+/* Unknown glyphs get a family-colored aura that hints at the ingredient's color family */
+.order-orb.glyph-orb-unknown {
+  background: var(--glyph-aura-bg, rgba(255,255,255,0.06));
+  border: 1px solid var(--glyph-aura-border, rgba(255,255,255,0.3));
+  box-shadow: 0 0 12px var(--glyph-aura-glow, rgba(255,255,255,0.2));
+  animation: glyphAuraPulse 2.4s ease-in-out infinite;
+}
+.order-orb.glyph-orb-unknown .orb-glyph {
+  color: var(--glyph-aura-text, #fff);
+  text-shadow: 0 0 8px var(--glyph-aura-glow, rgba(255,255,255,0.5));
+}
+
+@keyframes glyphAuraPulse {
+  0%, 100% { box-shadow: 0 0 10px var(--glyph-aura-glow, rgba(255,255,255,0.18)); }
+  50%      { box-shadow: 0 0 18px var(--glyph-aura-glow, rgba(255,255,255,0.36)); }
+}
+
+/* Family-specific aura colors */
+.glyph-family-warm {
+  --glyph-aura-bg: rgba(224,85,85,0.12);
+  --glyph-aura-border: rgba(224,85,85,0.45);
+  --glyph-aura-glow: rgba(255,140,66,0.5);
+  --glyph-aura-text: #ff9a6e;
+}
+.glyph-family-cool {
+  --glyph-aura-bg: rgba(74,184,196,0.12);
+  --glyph-aura-border: rgba(74,184,196,0.45);
+  --glyph-aura-glow: rgba(74,138,255,0.5);
+  --glyph-aura-text: #6fc4d4;
+}
+.glyph-family-pale {
+  --glyph-aura-bg: rgba(232,224,208,0.12);
+  --glyph-aura-border: rgba(232,224,208,0.45);
+  --glyph-aura-glow: rgba(232,224,208,0.45);
+  --glyph-aura-text: #f0e8d8;
+}
+.glyph-family-vivid {
+  --glyph-aura-bg: rgba(200,114,200,0.12);
+  --glyph-aura-border: rgba(200,114,200,0.45);
+  --glyph-aura-glow: rgba(255,110,180,0.55);
+  --glyph-aura-text: #e898d8;
 }

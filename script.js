@@ -62,8 +62,9 @@ let state = {
   pendingSpawn: null, // Track timeout ID to prevent double-spawns
   // Per-customer learned color swaps: { 'Zyrex-7': Set of "nova|cryo" pair-keys discovered }
   learnedSwaps: {},
-  // Glyph cipher: ingredient_id -> count of correct serves; reveals at >=2
-  glyphServes: {},
+  // Glyph cipher: ingredient_id -> count of correct serves; reveals at >=1
+  // Pre-seeded with the starter ingredients so the player has a foothold in Glyphara orders
+  glyphServes: { nova: 1, cryo: 1, lunar: 1 },
   // Currently-shown customer (so reveal logic can reference them after serve)
   activeCustomer: null,
   // Drag-drop state: which orb slots have been confirmed correct this order
@@ -116,7 +117,7 @@ const SPECIES_INTROS = {
   },
   Glyphara: {
     title: 'First Contact: Glyphara',
-    body: 'Glyphara species speak only in glyphs — pure symbol, no color, no shape. You will not know which ingredient a glyph represents at first. Drag ingredients onto each orb to test your translations. Once you have correctly served a glyph twice, your Codex will record its meaning. Wrong drops cost time.',
+    body: 'Glyphara species speak only in glyphs — pure symbol, no color, no shape. Each glyph radiates a faint aura that hints at the ingredient\'s color family: warm, cool, pale, or vivid. Use the aura to narrow down which ingredient a glyph represents, then drag to test. Serve a glyph correctly once and your Codex records it permanently. Wrong drops cost time.',
   },
 };
 
@@ -291,7 +292,19 @@ animateTitle();
 function buildIngredientGrid() {
   const grid = document.getElementById('ingredient-grid');
   grid.innerHTML = '';
-  INGREDIENTS.forEach(ing => {
+
+  // Define the row layout: each row is a swap pair (or a single unpaired ingredient).
+  // Pairs come from the union of all Chromara cipherSwaps.
+  const PAIR_ROWS = [
+    ['nova',  'cryo'],   // Ember ↔ Frostbite (hot/cold)
+    ['void',  'star'],   // Eclipse ↔ Starlight (dark/light)
+    ['lunar', 'solar'],  // Moonshadow ↔ Sunbeam (moon/sun)
+    ['nebul', 'comet'],  // Drifting ↔ Streaking (slow/fast)
+    ['quark'],           // Tidewater (unpaired)
+    ['pulsr'],           // Pulsar (unpaired)
+  ];
+
+  const makeBtn = (ing) => {
     const btn = document.createElement('button');
     btn.className = 'ing-btn';
     btn.dataset.id = ing.id;
@@ -307,7 +320,30 @@ function buildIngredientGrid() {
       btn.classList.add('dragging');
     });
     btn.addEventListener('dragend', () => btn.classList.remove('dragging'));
-    grid.appendChild(btn);
+    return btn;
+  };
+
+  PAIR_ROWS.forEach(row => {
+    const rowEl = document.createElement('div');
+    rowEl.className = 'ing-row';
+    if (row.length === 2) rowEl.classList.add('ing-row-pair');
+
+    if (row.length === 2) {
+      const [a, b] = row.map(id => INGREDIENTS.find(i => i.id === id)).filter(Boolean);
+      if (!a || !b) return;
+      rowEl.appendChild(makeBtn(a));
+      const link = document.createElement('div');
+      link.className = 'ing-pair-link';
+      link.innerHTML = '<span>⇄</span>';
+      rowEl.appendChild(link);
+      rowEl.appendChild(makeBtn(b));
+    } else {
+      const ing = INGREDIENTS.find(i => i.id === row[0]);
+      if (!ing) return;
+      rowEl.appendChild(makeBtn(ing));
+    }
+
+    grid.appendChild(rowEl);
   });
 }
 
@@ -316,14 +352,14 @@ function buildCodex() {
   grid.innerHTML = '';
   INGREDIENTS.forEach(ing => {
     const isKnown = state.knownIngredients.has(ing.id);
-    // Glyph is "decoded" if served correctly to a Glyphara alien at least 2x
-    const glyphDecoded = (state.glyphServes[ing.id] || 0) >= 2;
+    // Glyph is "decoded" if served correctly to a Glyphara alien at least once
+    const glyphDecoded = (state.glyphServes[ing.id] || 0) >= 1;
     const el = document.createElement('div');
     el.className = 'codex-entry' + (isKnown ? ' known' : '');
     el.id = 'codex-' + ing.id;
     const glyphPart = isKnown && glyphDecoded
       ? `<div class="codex-glyph" title="Glyphara cipher decoded">${ing.glyph}</div>`
-      : (isKnown ? `<div class="codex-glyph locked" title="Glyphara cipher unknown">${(state.glyphServes[ing.id] || 0)}/2</div>` : '');
+      : (isKnown ? `<div class="codex-glyph locked" title="Glyphara cipher unknown">?</div>` : '');
     el.innerHTML = `
       <div class="codex-dot" style="background:${isKnown ? ing.color : '#333'}">${isKnown ? ing.icon : '?'}</div>
       <div class="codex-label">${isKnown ? ing.name.split(' ')[0] : '???'}</div>
@@ -642,10 +678,16 @@ function spawnCustomer() {
         }
       }
       else if (cust.type === 'glyph') {
-        // Show only the glyph — colorless, cipher-coded. Player must decode.
+        // Show only the glyph — cipher-coded. Player must decode.
         orb.classList.add('glyph-orb');
-        orb.style.background = 'rgba(168,255,120,0.08)';
-        orb.style.border = '1px solid rgba(168,255,120,0.4)';
+        // If the glyph hasn't been decoded yet, give it a faint family-colored aura
+        // as a hint about the ingredient's color family (warm/cool/pale/vivid).
+        const glyphDecoded = (state.glyphServes[ing.id] || 0) >= 1;
+        if (!glyphDecoded) {
+          orb.classList.add('glyph-orb-unknown');
+          orb.classList.add(`glyph-family-${ing.family}`);
+          orb.title = 'Unknown glyph — the aura hints at its color family';
+        }
         orb.innerHTML = `<span class="orb-glyph">${ing.glyph}</span><span class="orb-num">${idx+1}</span><div class="orb-confirm-badge"></div>`;
       }
 
@@ -694,9 +736,17 @@ function playOrderSequence(order, type, cb) {
   const seq = document.getElementById('order-seq');
   const orbs = seq.querySelectorAll('.order-orb');
 
+  // Kill any prior orb-intro timeline so its callback doesn't fire on the wrong customer
+  if (state.orbIntroTimeline) {
+    state.orbIntroTimeline.kill();
+    state.orbIntroTimeline = null;
+  }
+
   const tl = gsap.timeline({ onComplete: () => {
+    state.orbIntroTimeline = null;
     if (cb) cb();
   }});
+  state.orbIntroTimeline = tl;
 
   order.forEach((_, i) => {
     tl.to(orbs[i], { opacity: 1, scale: 1.15, duration: .3, ease: 'power2.out' })
@@ -877,6 +927,14 @@ function recordElimination(orbEl, orbIndex, ingId) {
 // ── PATIENCE TIMER ────────────────────────────────────────────────────────────
 
 function startPatience() {
+  // Kill any prior patience tween — multiple concurrent tweens were causing stale "too slow" lives lost
+  if (state.patienceTween) {
+    state.patienceTween.kill();
+    state.patienceTween = null;
+  }
+  // Don't start patience if the game isn't active or we're in a transition
+  if (!state.gameActive || state.inTransition) return;
+
   const duration = Math.max(35 - state.round, 18); // Generous baseline; floor at 18s
   const fill = document.getElementById('patience-fill');
   gsap.set(fill, { scaleX: 1 });
@@ -892,7 +950,10 @@ function startPatience() {
 }
 
 function stopPatience() {
-  if (state.patienceTween) state.patienceTween.kill();
+  if (state.patienceTween) {
+    state.patienceTween.kill();
+    state.patienceTween = null;
+  }
 }
 
 // ── ORDER LOGIC ───────────────────────────────────────────────────────────────
@@ -1256,7 +1317,7 @@ function startGame() {
     gameActive: true,
     pendingSpawn: null,
     learnedSwaps: {},
-    glyphServes: {},
+    glyphServes: { nova: 1, cryo: 1, lunar: 1 },
     activeCustomer: null,
     confirmedOrbs: [],
     compoundConfirmed: [],
